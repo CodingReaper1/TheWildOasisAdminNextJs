@@ -36,11 +36,6 @@ function CabinTable({
     (a, b) => (a[field] - b[field]) * modifier,
   );
 
-  // const [optimisticNumbers, setOptimisticNumbers] = useOptimistic(
-  //   [1, 2, 3, 4, 5, 6, 7],
-  //   (state, newNumber: number) => [...state, newNumber],
-  // );
-
   return (
     <Menus>
       <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
@@ -52,15 +47,6 @@ function CabinTable({
           <div>Discount</div>
           <div></div>
         </Table.Header>
-
-        {/* {optimisticNumbers.map((number, i) => (
-        <div key={i}>
-          <p>{number}</p>
-          <form action={() => setOptimisticNumbers(number + 1)}>
-            <button>click me</button>
-          </form>
-        </div>
-      ))} */}
 
         <Table.Body
           data={sortedCabins}

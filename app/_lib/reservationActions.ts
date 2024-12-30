@@ -3,34 +3,39 @@
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
 import { getToday } from "../_utils/helpers";
-import { isAuthenticated } from "../_utils/serverHelpers";
+import { createReservations, isAuthenticated } from "../_utils/serverHelpers";
 import { z } from "zod";
 import { ReservationsSchemaDatabase } from "../_schemas/databaseSchemas";
-import {
-  ReservationWithoutId,
-  UpdateCheckinSchema,
-} from "../_schemas/reservationSchemas";
+import { UpdateCheckinSchema } from "../_schemas/reservationSchemas";
 
-export async function createDummyReservations(
-  data: z.infer<typeof ReservationWithoutId>[],
-) {
-  const result = z.array(ReservationWithoutId).safeParse(data);
-
+export async function createDummyReservations() {
   try {
     await isAuthenticated();
 
-    if (!result.success) throw new Error("Validation failed");
+    await deleteReservations();
 
-    const parsedData = result.data;
+    const data = await createReservations();
 
     await prisma.reservations.createMany({
-      data: parsedData,
+      data: data,
     });
+    revalidatePath("/dashboard");
     revalidatePath("/reservations");
   } catch (error) {
     console.error(error);
   }
 }
+
+// async function uploadAll() {
+//   setIsLoading(true);
+//   await deleteReservations();
+//   await deleteCabins();
+
+//   await createCabins(dummyCabins);
+//   await createReservations();
+
+//   setIsLoading(false);
+// }
 
 export async function getAllReservationsWithCount() {
   try {
