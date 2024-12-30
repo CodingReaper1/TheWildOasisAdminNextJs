@@ -10,7 +10,7 @@ import NavLink from "./NavLink";
 async function MainNav() {
   return (
     <nav className="mb-2">
-      <ul className="flex flex-col gap-[0.8rem] text-[2.4rem]">
+      <ul className="flex flex-col gap-[0.8rem]">
         <li>
           <NavLink text="Home" href="/dashboard">
             <HiOutlineHome />
