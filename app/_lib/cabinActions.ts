@@ -58,10 +58,11 @@ export async function duplicateCabin(
         name: `Copy of ${data.name}`,
       },
     });
-    revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
+  } finally {
+    revalidatePath("/cabins");
   }
 }
 

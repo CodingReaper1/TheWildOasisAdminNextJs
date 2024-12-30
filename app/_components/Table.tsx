@@ -69,7 +69,7 @@ function Row({ children }: { children: React.ReactNode }) {
 
 type BodyProps<T> = {
   data: T[];
-  render: (reservationOrCabin: T) => JSX.Element;
+  render: (reservationOrCabin: T, i: number) => JSX.Element;
 };
 
 function Body<T>({ data, render }: BodyProps<T>) {

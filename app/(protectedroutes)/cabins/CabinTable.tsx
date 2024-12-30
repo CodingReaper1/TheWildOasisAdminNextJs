@@ -7,16 +7,17 @@ import Menus from "../../_components/Menus";
 import Empty from "../../_components/Empty";
 import { useSearchParams } from "next/navigation";
 import { Prisma } from "@prisma/client";
+import { useOptimistic, useTransition } from "react";
+import toast from "react-hot-toast";
+import { deleteCabin, duplicateCabin } from "@/app/_lib/cabinActions";
 
-function CabinTable({
-  cabins,
-}: {
-  cabins: Prisma.CabinsGetPayload<object>[] | undefined;
-}) {
+type OptimisticUpdateTypes = {
+  cabin: Prisma.CabinsGetPayload<object>;
+  action: "duplicate" | "delete";
+};
+
+function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
   const searchParams = useSearchParams();
-
-  if (!cabins) return <Spinner />;
-  if (!cabins.length) return <Empty resourceName="cabins" />;
 
   // 1) FILTER
   const filterValue = searchParams.get("discount") || "all";
@@ -36,6 +37,53 @@ function CabinTable({
     (a, b) => (a[field] - b[field]) * modifier,
   );
 
+  const [, startTransition] = useTransition();
+
+  const [optimisticCabins, setOptimisticCabins] = useOptimistic(
+    sortedCabins,
+    (prevState, { cabin, action }: OptimisticUpdateTypes) => {
+      if (action === "duplicate") return [...prevState, cabin];
+
+      if (action === "delete")
+        return prevState.filter((prevCabin) => prevCabin.id !== cabin.id);
+
+      return [...prevState];
+    },
+  );
+
+  function handleDuplicate(cabin: Prisma.CabinsGetPayload<object>) {
+    toast.success("Cabin successfully duplicated!");
+
+    startTransition(async () => {
+      setOptimisticCabins({
+        cabin: { ...cabin, name: `Copy of ${cabin.name}` },
+        action: "duplicate",
+      });
+
+      const res = await duplicateCabin(cabin.id);
+
+      if (res?.error) toast.error(res.error);
+    });
+  }
+
+  function handleDelete(cabin: Prisma.CabinsGetPayload<object>) {
+    toast.success("Cabin successfully deleted!");
+
+    startTransition(async () => {
+      setOptimisticCabins({
+        cabin: { ...cabin, name: `Copy of ${cabin.name}` },
+        action: "delete",
+      });
+
+      const res = await deleteCabin(cabin.id);
+
+      if (res?.error) toast.error(res.error);
+    });
+  }
+
+  if (!cabins) return <Spinner />;
+  if (!cabins.length) return <Empty resourceName="cabins" />;
+
   return (
     <Menus>
       <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
@@ -49,8 +97,15 @@ function CabinTable({
         </Table.Header>
 
         <Table.Body
-          data={sortedCabins}
-          render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+          data={optimisticCabins}
+          render={(cabin, i) => (
+            <CabinRow
+              handleDuplicate={handleDuplicate}
+              handleDelete={handleDelete}
+              cabin={cabin}
+              key={i}
+            />
+          )}
         />
       </Table>
     </Menus>
