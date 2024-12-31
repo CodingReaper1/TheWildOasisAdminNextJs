@@ -2,6 +2,24 @@ import { z } from "zod";
 import { FileImageSchema, PasswordConfirmSchema } from "./index";
 import { UserSchemaDatabase } from "./databaseSchemas";
 
+type SuperValidateTypes = {
+  passwordConfirm: string;
+  password: string;
+};
+
+const superValidate = (
+  { passwordConfirm, password }: SuperValidateTypes,
+  ctx: z.RefinementCtx,
+) => {
+  if (passwordConfirm !== password) {
+    ctx.addIssue({
+      code: "custom",
+      message: "The passwords did not match",
+      path: ["passwordConfirm"],
+    });
+  }
+};
+
 export const LoginSchema = z.object({
   email: UserSchemaDatabase.shape.email,
 
@@ -30,15 +48,7 @@ export const SignupSchema = z
 
     passwordConfirm: PasswordConfirmSchema,
   })
-  .superRefine(({ passwordConfirm, password }, ctx) => {
-    if (passwordConfirm !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "The passwords did not match",
-        path: ["passwordConfirm"],
-      });
-    }
-  });
+  .superRefine(superValidate);
 
 export const UpdatedUserSchema = z
   .object({
@@ -58,12 +68,4 @@ export const UpdatedUserSchema = z
 
     userId: UserSchemaDatabase.shape.id,
   })
-  .superRefine(({ passwordConfirm, password }, ctx) => {
-    if (passwordConfirm !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "The passwords did not match",
-        path: ["passwordConfirm"],
-      });
-    }
-  });
+  .superRefine(superValidate);

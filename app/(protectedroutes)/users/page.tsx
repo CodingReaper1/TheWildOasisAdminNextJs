@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Heading from "../../_components/Heading";
-import SignupForm from "../../_components/SignupForm";
+import SignupForm from "./SignupForm";
 
 export const metadata: Metadata = {
   title: "Create a new user",

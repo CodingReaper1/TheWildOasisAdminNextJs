@@ -5,7 +5,7 @@ import Table from "../../_components/Table";
 import Menus from "../../_components/Menus";
 import Empty from "../../_components/Empty";
 import Spinner from "../../_components/Spinner";
-import Pagination from "../../_components/Pagination";
+import Pagination from "./Pagination";
 import { Prisma } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { PAGE_SIZE } from "@/app/_utils/constants";

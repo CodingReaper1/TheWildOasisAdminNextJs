@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Heading from "../../_components/Heading";
 import Row from "../../_components/Row";
-import UpdateUserDateForm from "../../_components/UpdateUserDataForm";
+import UpdateUserDateForm from "./UpdateUserDataForm";
 
 export const metadata: Metadata = {
   title: "Account",

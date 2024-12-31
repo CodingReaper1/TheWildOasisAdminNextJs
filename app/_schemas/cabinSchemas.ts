@@ -2,6 +2,24 @@ import { z } from "zod";
 import { CabinsSchemaDatabase } from "./databaseSchemas";
 import { FileImageSchema } from "./index";
 
+type SuperValidateTypes = {
+  discount: number;
+  regularPrice: number;
+};
+
+const superValidate = (
+  { discount, regularPrice }: SuperValidateTypes,
+  ctx: z.RefinementCtx,
+) => {
+  if (discount >= regularPrice) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Discount should be less than regular price",
+      path: ["discount"],
+    });
+  }
+};
+
 export const CreateCabinSchema = z
   .object({
     name: CabinsSchemaDatabase.shape.name,
@@ -16,15 +34,7 @@ export const CreateCabinSchema = z
 
     image: FileImageSchema.refine((file) => file.size > 0, "Image is required"),
   })
-  .superRefine(({ discount, regularPrice }, ctx) => {
-    if (discount >= regularPrice) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Discount should be less than regular price",
-        path: ["discount"],
-      });
-    }
-  });
+  .superRefine(superValidate);
 
 export const CreateCabinsSchema = CreateCabinSchema._def.schema
   .omit({
@@ -33,15 +43,7 @@ export const CreateCabinsSchema = CreateCabinSchema._def.schema
   .extend({
     image: CabinsSchemaDatabase.shape.image,
   })
-  .superRefine(({ discount, regularPrice }, ctx) => {
-    if (discount >= regularPrice) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Discount should be less than regular price",
-        path: ["discount"],
-      });
-    }
-  });
+  .superRefine(superValidate);
 
 export const UpdateCabinSchema = CreateCabinSchema._def.schema
   .omit({
@@ -50,4 +52,5 @@ export const UpdateCabinSchema = CreateCabinSchema._def.schema
   .extend({
     image: FileImageSchema.optional(),
     cabinId: CabinsSchemaDatabase.shape.id,
-  });
+  })
+  .superRefine(superValidate);

@@ -1,16 +1,16 @@
 "use client";
 
-import Button from "../_components/Button";
-import FileInput from "../_components/FileInput";
-import Form from "../_components/Form";
-import FormRow from "../_components/FormRow";
-import Input from "../_components/Input";
+import Button from "../../_components/Button";
+import FileInput from "../../_components/FileInput";
+import Form from "../../_components/Form";
+import FormRow from "../../_components/FormRow";
+import Input from "../../_components/Input";
 
 import { useFormState } from "react-dom";
-import { updateUser } from "../_lib/authActions";
+import { updateUser } from "../../_lib/authActions";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import Spinner from "../_components/Spinner";
+import Spinner from "../../_components/Spinner";
 import { useRef } from "react";
 
 function UpdateUserDataForm() {

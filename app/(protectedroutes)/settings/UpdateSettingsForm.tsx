@@ -7,15 +7,12 @@ import Input from "../../_components/Input";
 import { Prisma } from "@prisma/client";
 import { updateSettings } from "@/app/_lib/settingsActions";
 import toast from "react-hot-toast";
-import { useTransition } from "react";
 
 type UpdateSettingsFormProps = {
   settings?: Prisma.SettingsGetPayload<object> | null;
 };
 
 function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
-  const [isPending, startTransition] = useTransition();
-
   if (!settings?.id) return <Empty resourceName="settings" />;
 
   const {
@@ -29,20 +26,15 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
     e: React.FocusEvent<HTMLInputElement>,
     field: string,
   ) {
-    startTransition(async () => {
-      const { value } = e.target;
+    toast.success("Setting successfully updated!");
 
-      if (!value) return;
+    const { value } = e.target;
 
-      const res = await updateSettings({ value: +value, field });
+    if (!value) return;
 
-      if (res?.error) {
-        toast.error(res.error);
-        return;
-      }
+    const res = await updateSettings({ value: +value, field });
 
-      toast.success("Setting successfully updated!");
-    });
+    if (res?.error) return toast.error(res.error);
   }
 
   return (
@@ -52,7 +44,6 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
           type="number"
           id="min-nights"
           defaultValue={minimumReservationLength}
-          disabled={isPending}
           onBlur={(e) => handleBlur(e, "minimumReservationLength")}
         />
       </FormRow>
@@ -60,7 +51,6 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
         <Input
           type="number"
           id="max-nights"
-          disabled={isPending}
           defaultValue={maxReservationLength}
           onBlur={(e) => handleBlur(e, "maxReservationLength")}
         />
@@ -69,7 +59,6 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
         <Input
           type="number"
           id="max-guests"
-          disabled={isPending}
           defaultValue={maxGuestsPerReservation}
           onBlur={(e) => handleBlur(e, "maxGuestsPerReservation")}
         />
@@ -78,7 +67,6 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
         <Input
           type="number"
           id="breakfast-price"
-          disabled={isPending}
           defaultValue={breakFastPrice}
           onBlur={(e) => handleBlur(e, "breakfastPrice")}
         />

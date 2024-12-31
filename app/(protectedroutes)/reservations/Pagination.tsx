@@ -1,7 +1,7 @@
 "use client";
 
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
-import { PAGE_SIZE } from "../_utils/constants";
+import { PAGE_SIZE } from "../../_utils/constants";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function Pagination({ count }: { count: number }) {
