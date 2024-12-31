@@ -3,38 +3,27 @@
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
 import { getToday } from "../_utils/helpers";
-import { createReservations, isAuthenticated } from "../_utils/serverHelpers";
+import { isAuthenticated } from "../_utils/serverHelpers";
 import { z } from "zod";
 import { ReservationsSchemaDatabase } from "../_schemas/databaseSchemas";
 import { UpdateCheckinSchema } from "../_schemas/reservationSchemas";
 
-export async function createDummyReservations() {
-  try {
-    await isAuthenticated();
+// export async function createDummyReservations() {
+//   try {
+//     await isAuthenticated();
 
-    await deleteReservations();
+//     await deleteReservations();
 
-    const data = await createReservations();
+//     const data = await createReservations();
 
-    await prisma.reservations.createMany({
-      data: data,
-    });
-    revalidatePath("/dashboard");
-    revalidatePath("/reservations");
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// async function uploadAll() {
-//   setIsLoading(true);
-//   await deleteReservations();
-//   await deleteCabins();
-
-//   await createCabins(dummyCabins);
-//   await createReservations();
-
-//   setIsLoading(false);
+//     await prisma.reservations.createMany({
+//       data: data,
+//     });
+//     revalidatePath("/dashboard");
+//     revalidatePath("/reservations");
+//   } catch (error) {
+//     console.error(error);
+//   }
 // }
 
 export async function getAllReservationsWithCount() {
@@ -197,7 +186,7 @@ export async function updateCheckout(
     });
 
     revalidatePath("/dashboard");
-    revalidatePath("/reservations");
+    revalidatePath("/reservations", "layout");
   } catch (error) {
     console.error(error);
     return { error: "There was an error while checking out" };
@@ -222,7 +211,7 @@ export async function updateCheckin(data: z.infer<typeof UpdateCheckinSchema>) {
     });
 
     revalidatePath("/dashboard");
-    revalidatePath("/reservations");
+    revalidatePath("/reservations", "layout");
   } catch (error) {
     console.error(error);
     return { error: "There was an error while checking in" };
@@ -234,7 +223,7 @@ export async function deleteReservations() {
     await isAuthenticated();
 
     await prisma.reservations.deleteMany();
-    revalidatePath("/reservations");
+    revalidatePath("/reservations", "layout");
   } catch (error) {
     console.error(error);
   }
@@ -257,7 +246,7 @@ export async function deleteReservation(
       },
     });
 
-    revalidatePath("/reservations");
+    revalidatePath("/reservations", "layout");
   } catch (error) {
     console.error(error);
   }

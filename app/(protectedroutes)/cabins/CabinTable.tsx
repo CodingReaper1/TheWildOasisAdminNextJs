@@ -17,30 +17,10 @@ type OptimisticUpdateTypes = {
 };
 
 function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
-  const searchParams = useSearchParams();
-
-  // 1) FILTER
-  const filterValue = searchParams.get("discount") || "all";
-
-  let filteredCabins = cabins;
-  if (filterValue === "no-discount")
-    filteredCabins = cabins?.filter((cabin) => cabin.discount === 0);
-  if (filterValue === "with-discount")
-    filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
-
-  // 2) SORT
-  const sortBy = searchParams.get("sortBy") || "startDate-asc";
-  const [field, direction] = sortBy.split("-");
-  const modifier = direction === "asc" ? 1 : -1;
-  const sortedCabins = filteredCabins?.sort(
-    // @ts-expect-error: Couldn't fix error, type is first undefined then number, but it reads as any
-    (a, b) => (a[field] - b[field]) * modifier,
-  );
-
   const [, startTransition] = useTransition();
 
   const [optimisticCabins, setOptimisticCabins] = useOptimistic(
-    sortedCabins,
+    cabins,
     (prevState, { cabin, action }: OptimisticUpdateTypes) => {
       if (action === "duplicate") return [...prevState, cabin];
 
@@ -80,6 +60,25 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
       if (res?.error) toast.error(res.error);
     });
   }
+  const searchParams = useSearchParams();
+
+  // 1) FILTER
+  const filterValue = searchParams.get("discount") || "all";
+
+  let filteredCabins = optimisticCabins;
+  if (filterValue === "no-discount")
+    filteredCabins = optimisticCabins?.filter((cabin) => cabin.discount === 0);
+  if (filterValue === "with-discount")
+    filteredCabins = optimisticCabins?.filter((cabin) => cabin.discount > 0);
+
+  // 2) SORT
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+  const sortedCabins = filteredCabins?.sort(
+    // @ts-expect-error: Couldn't fix error, type is first undefined then number, but it reads as any
+    (a, b) => (a[field] - b[field]) * modifier,
+  );
 
   if (!cabins) return <Spinner />;
   if (!cabins.length) return <Empty resourceName="cabins" />;
@@ -97,7 +96,7 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
         </Table.Header>
 
         <Table.Body
-          data={optimisticCabins}
+          data={sortedCabins}
           render={(cabin, i) => (
             <CabinRow
               handleDuplicate={handleDuplicate}

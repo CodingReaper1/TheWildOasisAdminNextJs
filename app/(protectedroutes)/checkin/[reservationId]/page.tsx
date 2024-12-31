@@ -7,6 +7,8 @@ import {
 import CheckinReservation from "./CheckinReservation";
 import { Metadata } from "next";
 
+export const revalidate = 12 * 60 * 60;
+
 export async function generateMetadata({
   params,
 }: {

@@ -35,7 +35,10 @@ function ConfirmDelete({
           ariaLabel="Delete"
           variation="danger"
           disabled={disabled}
-          onClick={onConfirm}
+          onClick={() => {
+            onConfirm();
+            onCloseModal?.();
+          }}
         >
           Delete
         </Button>

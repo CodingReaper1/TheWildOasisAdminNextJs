@@ -2,17 +2,19 @@
 
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
-import { CreateCabinSchema, UpdateCabinSchema } from "../_schemas/cabinSchemas";
+import {
+  CreateCabinSchema,
+  CreateCabinsSchema,
+  UpdateCabinSchema,
+} from "../_schemas/cabinSchemas";
 import supabase, { bucketUrl } from "./supabase";
 import { createId } from "@paralleldrive/cuid2";
 import { isAuthenticated } from "../_utils/serverHelpers";
 import { z } from "zod";
 import { CabinsSchemaDatabase } from "../_schemas/databaseSchemas";
 
-export async function createCabins(
-  data: z.infer<typeof CabinsSchemaDatabase>[],
-) {
-  const result = z.array(CabinsSchemaDatabase).safeParse(data);
+export async function createCabins(data: z.infer<typeof CreateCabinsSchema>[]) {
+  const result = z.array(CreateCabinsSchema).safeParse(data);
 
   try {
     await isAuthenticated();

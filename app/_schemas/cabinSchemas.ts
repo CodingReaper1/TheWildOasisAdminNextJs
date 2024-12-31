@@ -14,10 +14,24 @@ export const CreateCabinSchema = z
 
     description: CabinsSchemaDatabase.shape.description,
 
-    image: FileImageSchema.refine(
-      (file) => file instanceof File && file.size > 0,
-      "Image is required",
-    ),
+    image: FileImageSchema.refine((file) => file.size > 0, "Image is required"),
+  })
+  .superRefine(({ discount, regularPrice }, ctx) => {
+    if (discount >= regularPrice) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Discount should be less than regular price",
+        path: ["discount"],
+      });
+    }
+  });
+
+export const CreateCabinsSchema = CreateCabinSchema._def.schema
+  .omit({
+    image: true,
+  })
+  .extend({
+    image: CabinsSchemaDatabase.shape.image,
   })
   .superRefine(({ discount, regularPrice }, ctx) => {
     if (discount >= regularPrice) {
@@ -30,12 +44,8 @@ export const CreateCabinSchema = z
   });
 
 export const UpdateCabinSchema = CreateCabinSchema._def.schema
-  .pick({
-    name: true,
-    maxCapacity: true,
-    regularPrice: true,
-    discount: true,
-    description: true,
+  .omit({
+    image: true,
   })
   .extend({
     image: FileImageSchema.optional(),

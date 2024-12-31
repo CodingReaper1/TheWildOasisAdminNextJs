@@ -80,7 +80,7 @@ function CabinRow({ cabin, handleDuplicate, handleDelete }: CabinRowProps) {
 
             <Modal.Window name="delete">
               <ConfirmDelete
-                resourceName="cabins"
+                resourceName="cabin"
                 onConfirm={() => handleDelete(cabin)}
               />
             </Modal.Window>

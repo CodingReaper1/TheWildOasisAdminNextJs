@@ -20,6 +20,8 @@ export async function generateStaticParams() {
   return ids;
 }
 
+export const revalidate = 12 * 60 * 60;
+
 export async function generateMetadata({
   params,
 }: {

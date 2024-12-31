@@ -73,7 +73,7 @@ function Window({ children, name }: WindowProps) {
         ref={ref as React.RefObject<HTMLDivElement>}
       >
         <button
-          className="absolute right-[1.9rem] top-[1.2rem] translate-x-[0.8rem] transform rounded-md border-none bg-none px-[0.4rem] text-[2.4rem] text-gray-500 transition-all duration-200 hover:bg-gray-100 dark:text-gray-400 hover:dark:bg-gray-800"
+          className="absolute right-[1.9rem] top-[1.2rem] translate-x-[0.8rem] transform rounded-md border-none bg-none p-[0.4rem] text-[2.4rem] text-gray-500 transition-all duration-200 hover:bg-gray-100 dark:text-gray-400 hover:dark:bg-gray-800"
           onClick={close}
           aria-label="Icon"
         >
