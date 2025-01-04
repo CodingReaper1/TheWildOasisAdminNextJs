@@ -79,10 +79,11 @@ export async function createCabin(formData: FormData) {
   };
 
   const result = CreateCabinSchema.safeParse(formDataObj);
+  console.log(formDataObj);
 
   if (!result.success)
     return {
-      zodErrors: result.error.flatten().fieldErrors,
+      error: "Validation failed",
     };
 
   const { image, name, ...data } = result.data;

@@ -8,21 +8,23 @@ import Empty from "../../_components/Empty";
 import { useSearchParams } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { useOptimistic, useTransition } from "react";
+import Row from "@/app/_components/Row";
+import Modal from "@/app/_components/Modal";
+import Button from "@/app/_components/Button";
+import CreateCabinForm from "./CreateCabinForm";
 import toast from "react-hot-toast";
 import { deleteCabin, duplicateCabin } from "@/app/_lib/cabinActions";
 
-type OptimisticUpdateTypes = {
+export type OptimisticUpdateTypes = {
   cabin: Prisma.CabinsGetPayload<object>;
-  action: "duplicate" | "delete";
+  action: "delete" | "create";
 };
 
 function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
-  const [, startTransition] = useTransition();
-
   const [optimisticCabins, setOptimisticCabins] = useOptimistic(
     cabins,
     (prevState, { cabin, action }: OptimisticUpdateTypes) => {
-      if (action === "duplicate") return [...prevState, cabin];
+      if (action === "create") return [...prevState, cabin];
 
       if (action === "delete")
         return prevState.filter((prevCabin) => prevCabin.id !== cabin.id);
@@ -31,19 +33,36 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
     },
   );
 
+  const [, startTransition] = useTransition();
+
   function handleDuplicate(cabin: Prisma.CabinsGetPayload<object>) {
     toast.success("Cabin successfully duplicated!");
 
     startTransition(async () => {
       setOptimisticCabins({
         cabin: { ...cabin, name: `Copy of ${cabin.name}` },
-        action: "duplicate",
+        action: "create",
       });
 
       const res = await duplicateCabin(cabin.id);
 
       if (res?.error) toast.error(res.error);
     });
+  }
+
+  function handleCreate(cabin: Prisma.CabinsGetPayload<object>) {
+    setOptimisticCabins({
+      cabin,
+      action: "create",
+    });
+  }
+
+  function handleEdit(cabin: Prisma.CabinsGetPayload<object>) {
+    console.log("edit");
+    // setOptimisticCabins({
+    //   cabin,
+    //   action: "create",
+    // });
   }
 
   function handleDelete(cabin: Prisma.CabinsGetPayload<object>) {
@@ -60,6 +79,7 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
       if (res?.error) toast.error(res.error);
     });
   }
+
   const searchParams = useSearchParams();
 
   // 1) FILTER
@@ -84,30 +104,48 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
   if (!cabins.length) return <Empty resourceName="cabins" />;
 
   return (
-    <Menus>
-      <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
-        <Table.Header role="row">
-          <div></div>
-          <div>Cabin</div>
-          <div>Capacity</div>
-          <div>Price</div>
-          <div>Discount</div>
-          <div></div>
-        </Table.Header>
+    <Row>
+      <Menus>
+        <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
+          <Table.Header role="row">
+            <div></div>
+            <div>Cabin</div>
+            <div>Capacity</div>
+            <div>Price</div>
+            <div>Discount</div>
+            <div></div>
+          </Table.Header>
 
-        <Table.Body
-          data={sortedCabins}
-          render={(cabin, i) => (
-            <CabinRow
-              handleDuplicate={handleDuplicate}
-              handleDelete={handleDelete}
-              cabin={cabin}
-              key={i}
+          <Table.Body
+            data={sortedCabins}
+            render={(cabin, i) => (
+              <CabinRow
+                handleCreate={handleCreate}
+                handleDuplicate={handleDuplicate}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                cabin={cabin}
+                key={i}
+              />
+            )}
+          />
+        </Table>
+      </Menus>
+
+      <div>
+        <Modal>
+          <Modal.Open opens="cabin-form">
+            <Button ariaLabel="Add cabin">Add new cabin</Button>
+          </Modal.Open>
+          <Modal.Window name="cabin-form">
+            <CreateCabinForm
+              handleCreate={handleCreate}
+              handleEdit={handleEdit}
             />
-          )}
-        />
-      </Table>
-    </Menus>
+          </Modal.Window>
+        </Modal>
+      </div>
+    </Row>
   );
 }
 

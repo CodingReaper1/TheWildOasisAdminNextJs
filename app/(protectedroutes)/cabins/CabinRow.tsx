@@ -9,14 +9,23 @@ import Table from "../../_components/Table";
 import Menus from "../../_components/Menus";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
+import SpinnerMini from "@/app/_components/SpinnerMini";
 
 type CabinRowProps = {
   cabin: Prisma.CabinsGetPayload<object>;
-  handleDuplicate: (cabin: Prisma.CabinsGetPayload<object>) => void;
+  handleCreate: (cabin: Prisma.CabinsGetPayload<object>) => void;
   handleDelete: (cabin: Prisma.CabinsGetPayload<object>) => void;
+  handleDuplicate: (cabin: Prisma.CabinsGetPayload<object>) => void;
+  handleEdit: (cabin: Prisma.CabinsGetPayload<object>) => void;
 };
 
-function CabinRow({ cabin, handleDuplicate, handleDelete }: CabinRowProps) {
+function CabinRow({
+  cabin,
+  handleCreate,
+  handleDelete,
+  handleDuplicate,
+  handleEdit,
+}: CabinRowProps) {
   const {
     id: cabinId,
     name,
@@ -25,19 +34,24 @@ function CabinRow({ cabin, handleDuplicate, handleDelete }: CabinRowProps) {
     discount,
     image,
   } = cabin;
+  const isCreatingOrEditing = cabinId < 1;
 
   return (
     <Table.Row>
       <div className="relative aspect-[3/2] h-auto w-[6.4rem]">
-        <Image
-          fill
-          src={image}
-          sizes="20vw"
-          quality={80}
-          priority
-          className="aspect-[3/2] w-64 -translate-x-[7px] scale-150 transform object-cover object-center text-sm"
-          alt="Image of cabin/house in woods"
-        />
+        {isCreatingOrEditing ? (
+          <SpinnerMini />
+        ) : (
+          <Image
+            fill
+            src={image}
+            sizes="20vw"
+            quality={80}
+            priority
+            className="aspect-[3/2] w-64 -translate-x-[7px] scale-150 transform object-cover object-center text-sm"
+            alt="Image of cabin/house in woods"
+          />
+        )}
       </div>
       <div className="font-sono text-[1.6rem] font-semibold">{name}</div>
       <div>Fits up to {maxCapacity} guests</div>
@@ -55,7 +69,7 @@ function CabinRow({ cabin, handleDuplicate, handleDelete }: CabinRowProps) {
       <div>
         <Modal>
           <Menus.Menu>
-            <Menus.Toggle id={cabinId} />
+            <Menus.Toggle id={cabinId} disabled={isCreatingOrEditing} />
 
             <Menus.List id={cabinId}>
               <Menus.Button
@@ -75,7 +89,11 @@ function CabinRow({ cabin, handleDuplicate, handleDelete }: CabinRowProps) {
             </Menus.List>
 
             <Modal.Window name="edit">
-              <CreateCabinForm cabinToEdit={cabin} />
+              <CreateCabinForm
+                handleCreate={handleCreate}
+                handleEdit={handleEdit}
+                cabinToEdit={cabin}
+              />
             </Modal.Window>
 
             <Modal.Window name="delete">

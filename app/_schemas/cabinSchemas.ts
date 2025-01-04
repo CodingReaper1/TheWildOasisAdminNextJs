@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { CabinsSchemaDatabase } from "./databaseSchemas";
-import { FileImageSchema } from "./index";
+import { FileImageSchema, FileImageSchemaClient } from "./index";
 
 type SuperValidateTypes = {
   discount: number;
@@ -51,6 +51,29 @@ export const UpdateCabinSchema = CreateCabinSchema._def.schema
   })
   .extend({
     image: FileImageSchema.optional(),
+    cabinId: CabinsSchemaDatabase.shape.id,
+  })
+  .superRefine(superValidate);
+
+// Seperating client and server side schema is nessesary since with normal handler type of file is fileList
+export const CreateCabinSchemaClient = CreateCabinSchema._def.schema
+  .omit({
+    image: true,
+  })
+  .extend({
+    image: FileImageSchemaClient.refine(
+      (fileList) => fileList?.length === 1 && fileList[0].size > 0,
+      "Image is required",
+    ),
+  })
+  .superRefine(superValidate);
+
+export const UpdateCabinSchemaClient = CreateCabinSchema._def.schema
+  .omit({
+    image: true,
+  })
+  .extend({
+    image: FileImageSchemaClient.optional(),
     cabinId: CabinsSchemaDatabase.shape.id,
   })
   .superRefine(superValidate);

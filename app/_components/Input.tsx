@@ -37,7 +37,9 @@ function Input<T extends FieldValues>({
       autoComplete={autoComplete}
       hidden={hidden}
       disabled={pending || disabled}
-      {...(register && id ? register(id) : { onBlur: onBlur, name: id })}
+      {...(register && id
+        ? register(id, { valueAsNumber: type === "number" })
+        : { onBlur: onBlur, name: id })}
       className="rounded-md border border-gray-300 bg-white px-[1.2rem] py-[0.8rem] shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed disabled:bg-gray-300 dark:border-gray-600 dark:bg-gray-0 dark:shadow-[0_0_0_rgba(0,0,0,0.4)] disabled:dark:bg-gray-600"
     />
   );

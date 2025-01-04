@@ -65,7 +65,12 @@ function useMenusContext() {
   return context;
 }
 
-function Toggle({ id }: { id: number }) {
+type ToggleProps = {
+  id: number;
+  disabled?: boolean;
+};
+
+function Toggle({ id, disabled }: ToggleProps) {
   const { openId, open, close, setPosition } = useMenusContext();
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
@@ -88,8 +93,9 @@ function Toggle({ id }: { id: number }) {
   return (
     <button
       aria-label="Icon"
-      className="translate-x-[0.8rem] rounded-md border-none bg-none p-[0.4rem] text-[2.4rem] text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
+      className="translate-x-[0.8rem] rounded-md border-none bg-none p-[0.4rem] text-[2.4rem] text-gray-700 transition-all duration-200 hover:bg-gray-100 disabled:cursor-not-allowed dark:text-gray-200 dark:hover:bg-gray-800"
       onClick={handleClick}
+      disabled={disabled}
     >
       <HiEllipsisVertical />
     </button>

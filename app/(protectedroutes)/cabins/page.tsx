@@ -1,7 +1,6 @@
 import CabinTable from "./CabinTable";
 import Heading from "../../_components/Heading";
 import Row from "../../_components/Row";
-import AddCabin from "./AddCabin";
 import CabinTableOperations from "./CabinTableOperations";
 import { getAllCabins } from "@/app/_lib/cabinActions";
 import { Metadata } from "next";
@@ -68,11 +67,7 @@ async function Page() {
         <CabinTableOperations />
       </Row>
 
-      <Row>
-        <CabinTable cabins={cabins} />
-
-        <AddCabin />
-      </Row>
+      <CabinTable cabins={cabins} />
     </>
   );
 }
