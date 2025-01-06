@@ -17,7 +17,7 @@ import { deleteCabin, duplicateCabin } from "@/app/_lib/cabinActions";
 
 export type OptimisticUpdateTypes = {
   cabin: Prisma.CabinsGetPayload<object>;
-  action: "delete" | "create";
+  action: "delete" | "create" | "update";
 };
 
 function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
@@ -28,6 +28,11 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
 
       if (action === "delete")
         return prevState.filter((prevCabin) => prevCabin.id !== cabin.id);
+
+      if (action === "update")
+        return prevState.map((prevCabin) =>
+          prevCabin.id === cabin.id ? cabin : prevCabin,
+        );
 
       return [...prevState];
     },
@@ -58,11 +63,10 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
   }
 
   function handleEdit(cabin: Prisma.CabinsGetPayload<object>) {
-    console.log("edit");
-    // setOptimisticCabins({
-    //   cabin,
-    //   action: "create",
-    // });
+    setOptimisticCabins({
+      cabin,
+      action: "update",
+    });
   }
 
   function handleDelete(cabin: Prisma.CabinsGetPayload<object>) {
@@ -120,7 +124,6 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
             data={sortedCabins}
             render={(cabin, i) => (
               <CabinRow
-                handleCreate={handleCreate}
                 handleDuplicate={handleDuplicate}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
@@ -138,10 +141,7 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
             <Button ariaLabel="Add cabin">Add new cabin</Button>
           </Modal.Open>
           <Modal.Window name="cabin-form">
-            <CreateCabinForm
-              handleCreate={handleCreate}
-              handleEdit={handleEdit}
-            />
+            <CreateCabinForm handleCreate={handleCreate} />
           </Modal.Window>
         </Modal>
       </div>

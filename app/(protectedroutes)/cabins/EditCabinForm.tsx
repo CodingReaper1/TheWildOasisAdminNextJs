@@ -9,32 +9,48 @@ import FormRow from "../../_components/FormRow";
 
 import toast from "react-hot-toast";
 import { Prisma } from "@prisma/client";
-import { createCabin } from "@/app/_lib/cabinActions";
+import { updateCabin } from "@/app/_lib/cabinActions";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateCabinSchemaClient } from "@/app/_schemas/cabinSchemas";
+import { UpdateCabinSchemaClient } from "@/app/_schemas/cabinSchemas";
 import { useState, useTransition } from "react";
 
 type CreateCabinFormProps = {
+  cabinToEdit: Prisma.CabinsGetPayload<object>;
   onCloseModal?: () => void;
-  handleCreate: (cabin: Prisma.CabinsGetPayload<object>) => void;
+  handleEdit: (cabin: Prisma.CabinsGetPayload<object>) => void;
 };
 
-function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
+function EditCabinForm({
+  cabinToEdit,
+  onCloseModal,
+  handleEdit,
+}: CreateCabinFormProps) {
+  const {
+    id: editId,
+    image: editImage,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    description,
+  } = cabinToEdit;
+
   const {
     handleSubmit,
     formState: { errors },
     register,
     reset,
-  } = useForm<z.infer<typeof CreateCabinSchemaClient>>({
-    resolver: zodResolver(CreateCabinSchemaClient),
+  } = useForm<z.infer<typeof UpdateCabinSchemaClient>>({
+    resolver: zodResolver(UpdateCabinSchemaClient),
     defaultValues: {
-      name: "",
-      maxCapacity: 0,
-      regularPrice: 0,
-      discount: 0,
-      description: "",
+      name,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+      cabinId: editId,
     },
   });
 
@@ -42,16 +58,16 @@ function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
 
   const [image, setImage] = useState<File>(new File([], ""));
 
-  async function onSubmit(values: z.infer<typeof CreateCabinSchemaClient>) {
-    toast.success("Cabin successfully created!");
+  async function onSubmit(values: z.infer<typeof UpdateCabinSchemaClient>) {
+    toast.success("Cabin successfully edited!");
     reset();
     onCloseModal?.();
 
     startTransition(async () => {
-      handleCreate({
+      handleEdit({
         ...values,
-        id: Math.random(),
-        image: "",
+        id: editId,
+        image: image.size === 0 ? editImage : "",
         createdAt: new Date(),
       });
 
@@ -61,7 +77,7 @@ function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
         formData.append(key, value.toString());
       }
 
-      const res = await createCabin(formData);
+      const res = await updateCabin(formData);
 
       if (res?.error) toast.error(res.error);
     });
@@ -104,6 +120,8 @@ function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
         />
       </FormRow>
 
+      <Input type="number" hidden id="cabinId" register={register} />
+
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button
@@ -114,10 +132,10 @@ function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
         >
           Cancel
         </Button>
-        <Button ariaLabel="Create cabin">Create new cabin</Button>
+        <Button ariaLabel="Edit cabin">Edit cabin</Button>
       </FormRow>
     </Form>
   );
 }
 
-export default CreateCabinForm;
+export default EditCabinForm;

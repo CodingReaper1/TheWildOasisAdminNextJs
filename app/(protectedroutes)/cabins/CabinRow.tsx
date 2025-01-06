@@ -1,7 +1,6 @@
 "use client";
 
 import { formatCurrency } from "../../_utils/helpers";
-import CreateCabinForm from "./CreateCabinForm";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import Modal from "../../_components/Modal";
 import ConfirmDelete from "../../_components/ConfirmDelete";
@@ -10,10 +9,10 @@ import Menus from "../../_components/Menus";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
 import SpinnerMini from "@/app/_components/SpinnerMini";
+import EditCabinForm from "./EditCabinForm";
 
 type CabinRowProps = {
   cabin: Prisma.CabinsGetPayload<object>;
-  handleCreate: (cabin: Prisma.CabinsGetPayload<object>) => void;
   handleDelete: (cabin: Prisma.CabinsGetPayload<object>) => void;
   handleDuplicate: (cabin: Prisma.CabinsGetPayload<object>) => void;
   handleEdit: (cabin: Prisma.CabinsGetPayload<object>) => void;
@@ -21,7 +20,6 @@ type CabinRowProps = {
 
 function CabinRow({
   cabin,
-  handleCreate,
   handleDelete,
   handleDuplicate,
   handleEdit,
@@ -34,12 +32,12 @@ function CabinRow({
     discount,
     image,
   } = cabin;
-  const isCreatingOrEditing = cabinId < 1;
+  const isCreating = cabinId < 1;
 
   return (
     <Table.Row>
       <div className="relative aspect-[3/2] h-auto w-[6.4rem]">
-        {isCreatingOrEditing ? (
+        {isCreating || image === "" ? (
           <SpinnerMini />
         ) : (
           <Image
@@ -69,7 +67,7 @@ function CabinRow({
       <div>
         <Modal>
           <Menus.Menu>
-            <Menus.Toggle id={cabinId} disabled={isCreatingOrEditing} />
+            <Menus.Toggle id={cabinId} disabled={isCreating} />
 
             <Menus.List id={cabinId}>
               <Menus.Button
@@ -89,11 +87,7 @@ function CabinRow({
             </Menus.List>
 
             <Modal.Window name="edit">
-              <CreateCabinForm
-                handleCreate={handleCreate}
-                handleEdit={handleEdit}
-                cabinToEdit={cabin}
-              />
+              <EditCabinForm handleEdit={handleEdit} cabinToEdit={cabin} />
             </Modal.Window>
 
             <Modal.Window name="delete">
