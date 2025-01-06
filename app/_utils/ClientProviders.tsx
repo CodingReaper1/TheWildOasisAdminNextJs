@@ -2,12 +2,20 @@
 
 import { Toaster } from "react-hot-toast";
 import { useDarkMode } from "../_context/DarkModeContext";
+import { AppProgressBar } from "next-nprogress-bar";
 
 function ClientProviders({ children }: { children: React.ReactNode }) {
   const { isDarkMode } = useDarkMode();
 
+  // Best place to add progressbar seemd here
   return (
     <>
+      <AppProgressBar
+        height="2px"
+        color="#4f46e5"
+        options={{ showSpinner: false }}
+      />
+
       {children}
 
       <Toaster
