@@ -1,22 +1,23 @@
 "use client";
 
-import ReservationDataBox from "./ReservationDataBox";
-import Row from "../../_components/Row";
-import Heading from "../../_components/Heading";
-import Tag from "../../_components/Tag";
-import ButtonGroup from "../../_components/ButtonGroup";
-import Button from "../../_components/Button";
-import ButtonText from "../../_components/ButtonText";
-import Spinner from "../../_components/Spinner";
-import ConfirmDelete from "../../_components/ConfirmDelete";
-import Modal from "../../_components/Modal";
-import Empty from "../../_components/Empty";
+import ReservationDataBox from "../ReservationDataBox";
+import Row from "../../../_components/Row";
+import Heading from "../../../_components/Heading";
+import Tag from "../../../_components/Tag";
+import ButtonGroup from "../../../_components/ButtonGroup";
+import Button from "../../../_components/Button";
+import ButtonText from "../../../_components/ButtonText";
+import Spinner from "../../../_components/Spinner";
+import ConfirmDelete from "../../../_components/ConfirmDelete";
+import Modal from "../../../_components/Modal";
+import Empty from "../../../_components/Empty";
 import { useRouter } from "next/navigation";
 import {
   deleteReservation,
   updateCheckout,
 } from "@/app/_lib/reservationActions";
 import { Prisma } from "@prisma/client";
+import toast from "react-hot-toast";
 
 type ReservationDetailProps = {
   reservation:
@@ -100,8 +101,10 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
             <ConfirmDelete
               resourceName="reservation"
               onConfirm={async () => {
-                await deleteReservation(reservationId);
+                toast.success("Reservation succesfully deleted");
                 router.back();
+
+                await deleteReservation(reservationId);
               }}
             />
           </Modal.Window>

@@ -17,10 +17,7 @@ import {
 import Modal from "../../_components/Modal";
 import ConfirmDelete from "../../_components/ConfirmDelete";
 import { Prisma } from "@prisma/client";
-import {
-  deleteReservation,
-  updateCheckout,
-} from "@/app/_lib/reservationActions";
+import { updateCheckout } from "@/app/_lib/reservationActions";
 
 export type ReservationRowProps = {
   reservation: {
@@ -32,6 +29,7 @@ export type ReservationRowProps = {
       name: string;
     };
   } & Prisma.ReservationsGetPayload<object>;
+  handleDelete: (reservationId: number) => void;
 };
 
 function ReservationRow({
@@ -47,6 +45,7 @@ function ReservationRow({
     user: { name: guestName, email },
     cabin: { name: cabinName },
   },
+  handleDelete,
 }: ReservationRowProps) {
   const statusToTagName = {
     unconfirmed: "blue",
@@ -138,7 +137,7 @@ function ReservationRow({
         <Modal.Window name="delete">
           <ConfirmDelete
             resourceName="reservation"
-            onConfirm={() => deleteReservation(reservationId)}
+            onConfirm={() => handleDelete(reservationId)}
           />
         </Modal.Window>
       </Modal>

@@ -245,9 +245,10 @@ export async function deleteReservation(
         id: parsedId,
       },
     });
-
-    revalidatePath("/reservations", "layout");
   } catch (error) {
     console.error(error);
+    return { error: "Something went wrong" };
+  } finally {
+    revalidatePath("/reservations", "layout");
   }
 }

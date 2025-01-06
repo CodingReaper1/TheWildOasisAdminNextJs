@@ -37,7 +37,7 @@ function CabinRow({
   return (
     <Table.Row>
       <div className="relative aspect-[3/2] h-auto w-[6.4rem]">
-        {isCreating || image === "" ? (
+        {image === "" ? (
           <SpinnerMini />
         ) : (
           <Image

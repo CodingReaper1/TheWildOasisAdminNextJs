@@ -9,24 +9,60 @@ import Pagination from "./Pagination";
 import { Prisma } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { PAGE_SIZE } from "@/app/_utils/constants";
+import { useOptimistic, useTransition } from "react";
+import toast from "react-hot-toast";
+import { deleteReservation } from "@/app/_lib/reservationActions";
 
 export type ReservationTableProps = {
-  reservations:
-    | ({
-        cabin: {
-          name: string;
-        };
-        user: {
-          email: string;
-          name: string;
-        };
-      } & Prisma.ReservationsGetPayload<object>)[]
-    | undefined;
+  reservations: ({
+    cabin: {
+      name: string;
+    };
+    user: {
+      email: string;
+      name: string;
+    };
+  } & Prisma.ReservationsGetPayload<object>)[];
 
   count: number;
 };
 
+type OptimisticUpdateTypes = {
+  reservationId: number;
+
+  action: "delete";
+};
+
 function ReservationTable({ reservations, count }: ReservationTableProps) {
+  const [optimisticReservations, setOptimisticReservations] = useOptimistic(
+    reservations,
+    (prevState, { reservationId, action }: OptimisticUpdateTypes) => {
+      if (action === "delete")
+        return prevState.filter(
+          (prevReservation) => prevReservation.id !== reservationId,
+        );
+
+      return [...prevState];
+    },
+  );
+
+  const [, startTransition] = useTransition();
+
+  function handleDelete(reservationId: number) {
+    toast.success("Reservation successfully deleted!");
+
+    startTransition(async () => {
+      setOptimisticReservations({
+        reservationId,
+        action: "delete",
+      });
+
+      const res = await deleteReservation(reservationId);
+
+      if (res?.error) toast.error(res.error);
+    });
+  }
+
   const searchParams = useSearchParams();
 
   if (!reservations) return <Spinner />;
@@ -47,7 +83,7 @@ function ReservationTable({ reservations, count }: ReservationTableProps) {
   const pageFromUrl = searchParams?.get("page");
   const page = !pageFromUrl ? 1 : +pageFromUrl;
 
-  let filteredReservations = reservations;
+  let filteredReservations = optimisticReservations;
   // FILTER
   if (filter) {
     filteredReservations = reservations.filter(
@@ -83,7 +119,11 @@ function ReservationTable({ reservations, count }: ReservationTableProps) {
         <Table.Body
           data={sortedReservations}
           render={(reservation) => (
-            <ReservationRow key={reservation.id} reservation={reservation} />
+            <ReservationRow
+              key={reservation.id}
+              handleDelete={handleDelete}
+              reservation={reservation}
+            />
           )}
         />
 

@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { FileImageSchema, PasswordConfirmSchema } from "./index";
+import {
+  FileImageSchema,
+  FileImageSchemaClient,
+  PasswordConfirmSchema,
+} from "./index";
 import { UserSchemaDatabase } from "./databaseSchemas";
 
 type SuperValidateTypes = {
@@ -67,5 +71,14 @@ export const UpdatedUserSchema = z
     avatar: FileImageSchema,
 
     userId: UserSchemaDatabase.shape.id,
+  })
+  .superRefine(superValidate);
+
+export const UpdatedUserSchemaClient = UpdatedUserSchema._def.schema
+  .omit({
+    avatar: true,
+  })
+  .extend({
+    avatar: FileImageSchemaClient,
   })
   .superRefine(superValidate);

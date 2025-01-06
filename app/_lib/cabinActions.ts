@@ -103,11 +103,11 @@ export async function createCabin(formData: FormData) {
         image: `${bucketUrl}${bucketData.path}`,
       },
     });
-
-    revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
+  } finally {
+    revalidatePath("/cabins");
   }
 }
 
@@ -169,11 +169,11 @@ export async function updateCabin(formData: FormData) {
         ...(imageUrl && { image: `${bucketUrl}${imageUrl}` }),
       },
     });
-
-    revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
+  } finally {
+    revalidatePath("/cabins");
   }
 }
 
@@ -192,11 +192,11 @@ export async function deleteCabin(
     await prisma.cabins.delete({
       where: { id: parsedId },
     });
-
-    revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
+  } finally {
+    revalidatePath("/cabins");
   }
 }
 

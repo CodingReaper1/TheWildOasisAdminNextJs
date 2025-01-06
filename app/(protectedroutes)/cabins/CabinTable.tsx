@@ -45,7 +45,7 @@ function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
 
     startTransition(async () => {
       setOptimisticCabins({
-        cabin: { ...cabin, name: `Copy of ${cabin.name}` },
+        cabin: { ...cabin, name: `Copy of ${cabin.name}`, id: Math.random() },
         action: "create",
       });
 

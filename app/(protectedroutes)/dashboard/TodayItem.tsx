@@ -1,6 +1,6 @@
 import Tag from "../../_components/Tag";
 import { Flag } from "../../_components/Flag";
-import CheckoutButton from "../checkin/CheckoutButton";
+import CheckoutButton from "./CheckoutButton";
 import Link from "next/link";
 import { Prisma } from "@prisma/client";
 

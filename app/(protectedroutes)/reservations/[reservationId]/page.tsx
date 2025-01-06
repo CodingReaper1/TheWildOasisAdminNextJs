@@ -2,7 +2,7 @@ import {
   getAllReservations,
   getReservation,
 } from "@/app/_lib/reservationActions";
-import ReservationDetail from "../ReservationDetail";
+import ReservationDetail from "./ReservationDetail";
 import { Metadata } from "next";
 
 type Params = {

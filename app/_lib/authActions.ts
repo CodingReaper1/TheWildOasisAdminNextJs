@@ -7,6 +7,7 @@ import supabase, { bucketUrl } from "./supabase";
 import { z } from "zod";
 import { isAuthenticated } from "../_utils/serverHelpers";
 import { UserSchemaDatabase } from "../_schemas/databaseSchemas";
+import { createId } from "@paralleldrive/cuid2";
 
 export async function createGuests(data: z.infer<typeof UserSchemaDatabase>[]) {
   try {
@@ -153,12 +154,12 @@ export async function updateUser(formData: FormData) {
     if (avatar.size > 0) {
       const { data: bucketData, error } = await supabase.storage
         .from("images-bucket")
-        .upload(`${fullName}${userId}`, avatar);
+        .upload(`${fullName}${createId()}`, avatar);
 
       if (error && error.message !== "The resource already exists")
         throw new Error(error.message);
 
-      imageUrl = bucketData?.path || `${fullName}${userId}`;
+      imageUrl = bucketData?.path;
     }
 
     const user = await getUserById(userId);
