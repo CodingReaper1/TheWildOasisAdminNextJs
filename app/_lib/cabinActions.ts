@@ -79,7 +79,6 @@ export async function createCabin(formData: FormData) {
   };
 
   const result = CreateCabinSchema.safeParse(formDataObj);
-  console.log(formDataObj);
 
   if (!result.success)
     return {
