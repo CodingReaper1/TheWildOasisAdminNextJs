@@ -1,6 +1,6 @@
 // Array of routes which are accesable to public
 
-export const publicRoutes = ["/"];
+export const publicRoutes = ["/", "/sitemap.xml", "/robots.txt"];
 
 // Array of routes which are nesseary for authentication
 
