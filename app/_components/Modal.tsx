@@ -68,6 +68,10 @@ function Window({ children, name }: WindowProps) {
     if (name === openName) document.body.style.overflow = "hidden";
 
     if (name !== openName) document.body.style.overflow = "visible";
+
+    return () => {
+      document.body.style.overflow = "visible";
+    };
   }, [openName, name]);
 
   if (name !== openName) return null;

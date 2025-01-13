@@ -6,6 +6,7 @@ type ConfirmDelteProps = {
   onConfirm: () => void;
   disabled?: boolean;
   onCloseModal?: () => void;
+  href?: string;
 };
 
 function ConfirmDelete({
@@ -13,6 +14,7 @@ function ConfirmDelete({
   onConfirm,
   disabled,
   onCloseModal,
+  href,
 }: ConfirmDelteProps) {
   return (
     <div className="flex w-[40rem] flex-col gap-[1.2rem]">
@@ -35,6 +37,7 @@ function ConfirmDelete({
           ariaLabel="Delete"
           variation="danger"
           disabled={disabled}
+          href={href}
           onClick={() => {
             onConfirm();
             onCloseModal?.();

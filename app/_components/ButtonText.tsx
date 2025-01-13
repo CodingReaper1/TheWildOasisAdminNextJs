@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 type ButtonTextProps = {
@@ -5,6 +6,7 @@ type ButtonTextProps = {
   children: React.ReactNode;
   ariaLabel: string;
   className?: string;
+  href?: string;
 };
 
 function ButtonText({
@@ -12,15 +14,29 @@ function ButtonText({
   onClick,
   ariaLabel,
   className,
+  href,
 }: ButtonTextProps) {
   return (
-    <button
-      onClick={onClick}
-      aria-label={ariaLabel}
-      className={`rounded-md border-none bg-none text-center text-[1.6rem] font-medium text-indigo-600 transition-all duration-300 hover:text-indigo-700 active:text-indigo-700 ${className}`}
-    >
-      {children}
-    </button>
+    <>
+      {!href ? (
+        <button
+          onClick={onClick}
+          aria-label={ariaLabel}
+          className={`rounded-md border-none bg-none text-center text-[1.6rem] font-medium text-indigo-600 transition-all duration-300 hover:text-indigo-700 active:text-indigo-700 ${className}`}
+        >
+          {children}
+        </button>
+      ) : (
+        <Link
+          onClick={onClick}
+          href={href}
+          aria-label={ariaLabel}
+          className={`rounded-md border-none bg-none text-center text-[1.6rem] font-medium text-indigo-600 transition-all duration-300 hover:text-indigo-700 active:text-indigo-700 ${className}`}
+        >
+          {children}
+        </Link>
+      )}
+    </>
   );
 }
 

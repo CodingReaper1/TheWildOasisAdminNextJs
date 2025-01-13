@@ -86,7 +86,7 @@ function ReservationTable({ reservations, count }: ReservationTableProps) {
   let filteredReservations = optimisticReservations;
   // FILTER
   if (filter) {
-    filteredReservations = reservations.filter(
+    filteredReservations = optimisticReservations.filter(
       (reservation) => reservation.status === filter.value,
     );
   }
@@ -94,7 +94,7 @@ function ReservationTable({ reservations, count }: ReservationTableProps) {
   const skip = page ? (page - 1) * PAGE_SIZE : 0;
   const take = PAGE_SIZE;
   const paginatedReservations = filteredReservations.filter(
-    (_, i) => i > skip && i < skip + take,
+    (_, i) => i >= skip && i < skip + take,
   );
 
   // SORTING

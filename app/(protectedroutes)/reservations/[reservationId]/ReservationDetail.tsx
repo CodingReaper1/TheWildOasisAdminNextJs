@@ -1,5 +1,3 @@
-"use client";
-
 import ReservationDataBox from "../ReservationDataBox";
 import Heading from "../../../_components/Heading";
 import Tag from "../../../_components/Tag";
@@ -7,16 +5,9 @@ import ButtonGroup from "../../../_components/ButtonGroup";
 import Button from "../../../_components/Button";
 import ButtonText from "../../../_components/ButtonText";
 import Spinner from "../../../_components/Spinner";
-import ConfirmDelete from "../../../_components/ConfirmDelete";
-import Modal from "../../../_components/Modal";
 import Empty from "../../../_components/Empty";
-import { useRouter } from "next/navigation";
-import {
-  deleteReservation,
-  updateCheckout,
-} from "@/app/_lib/reservationActions";
 import { Prisma } from "@prisma/client";
-import toast from "react-hot-toast";
+import ReservationDetailClientButtons from "./ReservationDetailClientButtons";
 
 type ReservationDetailProps = {
   reservation:
@@ -37,8 +28,6 @@ type ReservationDetailProps = {
 };
 
 function ReservationDetail({ reservation }: ReservationDetailProps) {
-  const router = useRouter();
-
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -62,7 +51,7 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
     <>
       <ButtonText
         ariaLabel="Go back"
-        onClick={() => router.back()}
+        href="/reservations"
         className="mb-[2rem] ml-auto"
       >
         &larr; Back
@@ -84,39 +73,12 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
           </Button>
         )}
 
-        {status === "checked-in" && (
-          <Button
-            ariaLabel="Check out"
-            onClick={() => updateCheckout(reservationId)}
-          >
-            Check out
-          </Button>
-        )}
+        <ReservationDetailClientButtons
+          status={status}
+          reservationId={reservationId}
+        />
 
-        <Modal>
-          <Modal.Open opens="delete">
-            <Button ariaLabel="Delete reservation" variation="danger">
-              Delete reservation
-            </Button>
-          </Modal.Open>
-          <Modal.Window name="delete">
-            <ConfirmDelete
-              resourceName="reservation"
-              onConfirm={async () => {
-                toast.success("Reservation succesfully deleted");
-                router.back();
-
-                await deleteReservation(reservationId);
-              }}
-            />
-          </Modal.Window>
-        </Modal>
-
-        <Button
-          ariaLabel="Go back"
-          variation="secondary"
-          onClick={() => router.back()}
-        >
+        <Button ariaLabel="Go back" variation="secondary" href="/reservations">
           Back
         </Button>
       </ButtonGroup>

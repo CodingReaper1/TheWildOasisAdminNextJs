@@ -59,11 +59,11 @@ function Button({
         </button>
       ) : (
         <Link
-          onClick={onClick}
+          onClick={disabled ? (e) => e.preventDefault() : onClick}
           type={type}
-          href={href}
+          href={disabled ? "#" : href}
           aria-label={ariaLabel}
-          className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
+          className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} ${disabled ? "cursor-not-allowed" : ""}`}
         >
           {pending && pendingStatus ? pendingStatus : children}
         </Link>

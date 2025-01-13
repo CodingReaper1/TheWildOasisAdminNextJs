@@ -209,12 +209,12 @@ export async function updateCheckin(data: z.infer<typeof UpdateCheckinSchema>) {
       },
       data: { hasBreakfast, extrasPrice, totalPrice, status: "checked-in" },
     });
-
-    revalidatePath("/dashboard");
-    revalidatePath("/reservations", "layout");
   } catch (error) {
     console.error(error);
     return { error: "There was an error while checking in" };
+  } finally {
+    revalidatePath("/dashboard");
+    revalidatePath("/reservations", "layout");
   }
 }
 

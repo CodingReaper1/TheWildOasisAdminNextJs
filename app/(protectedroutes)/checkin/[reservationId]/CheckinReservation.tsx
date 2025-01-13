@@ -11,7 +11,6 @@ import Spinner from "../../../_components/Spinner";
 import { useEffect, useState } from "react";
 import Checkbox from "../../../_components/Checkbox";
 import { formatCurrency } from "../../../_utils/helpers";
-import { useRouter } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { updateCheckin } from "@/app/_lib/reservationActions";
 import toast from "react-hot-toast";
@@ -42,8 +41,6 @@ function CheckinReservation({
 }: CheckinReservationProps) {
   const [confirmPaid, setConfirmPaid] = useState(false);
   const [addBreakfast, setAddBreakfast] = useState(false);
-  const [isCheckingIn, setIsCheckingIn] = useState(false);
-  const router = useRouter();
 
   useEffect(() => setConfirmPaid(reservation?.isPaid ?? false), [reservation]);
 
@@ -63,8 +60,10 @@ function CheckinReservation({
     (settings?.breakFastPrice || 0) * (numNights || 0) * numGuests;
 
   async function handleCheckin() {
-    setIsCheckingIn((bool) => !bool);
     if (!confirmPaid) return;
+
+    toast.success("Succesfully checked in!");
+
     let res;
     if (addBreakfast) {
       res = await updateCheckin({
@@ -78,17 +77,13 @@ function CheckinReservation({
     }
 
     if (res?.error) return toast.error(res.error);
-
-    toast.success("Succesfully checked in!");
-    router.push("/dashboard");
-    setIsCheckingIn((bool) => !bool);
   }
 
   return (
     <>
       <ButtonText
         ariaLabel="Go back"
-        onClick={() => router.back()}
+        href="/reservations"
         className="mb-[2rem] ml-auto"
       >
         &larr; Back
@@ -116,7 +111,7 @@ function CheckinReservation({
         <Checkbox
           checked={confirmPaid}
           onChange={() => setConfirmPaid((confirm) => !confirm)}
-          disabled={confirmPaid || isCheckingIn}
+          disabled={confirmPaid}
           id="confirm"
         >
           I confirm that {guests.name} has paid the total amount of{" "}
@@ -134,15 +129,12 @@ function CheckinReservation({
         <Button
           ariaLabel="Check in"
           onClick={handleCheckin}
+          href="/dashboard"
           disabled={!confirmPaid}
         >
           Check in reservation #{reservationId}
         </Button>
-        <Button
-          ariaLabel="Go back"
-          variation="secondary"
-          onClick={() => router.back()}
-        >
+        <Button ariaLabel="Go back" variation="secondary" href="/reservations">
           Back
         </Button>
       </ButtonGroup>
