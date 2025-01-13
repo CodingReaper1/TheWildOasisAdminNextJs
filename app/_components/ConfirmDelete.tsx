@@ -17,7 +17,7 @@ function ConfirmDelete({
   href,
 }: ConfirmDelteProps) {
   return (
-    <div className="flex w-[40rem] flex-col gap-[1.2rem]">
+    <div className="mx-[1rem] flex w-[22rem] flex-col gap-[1.2rem] xs:w-[30rem] sm:mx-0 sm:w-[40rem]">
       <Heading as="h3">Delete {resourceName}</Heading>
       <p className="mb-[1.2rem] text-gray-500 dark:text-gray-400">
         Are you sure you want to delete this {resourceName} permanently? This

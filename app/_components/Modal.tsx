@@ -80,7 +80,7 @@ function Window({ children, name }: WindowProps) {
     // used to avoid parent css overflow:hidden
     <div className="fixed left-0 top-0 z-[1000] h-[100vh] w-full bg-backdrop backdrop-blur-sm transition-all duration-500 dark:bg-darkBackdrop">
       <div
-        className="fixed left-1/2 top-1/2 w-[90%] -translate-x-1/2 -translate-y-1/2 transform overflow-y-auto rounded-lg bg-white py-[3.2rem] shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.12)] transition-all duration-500 dark:bg-gray-0 dark:shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.4)] lg:w-[80rem]"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform overflow-y-auto rounded-lg bg-white py-[3.2rem] shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.12)] transition-all duration-500 dark:bg-gray-0 dark:shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.4)]"
         ref={ref as React.RefObject<HTMLDivElement>}
       >
         <button
@@ -91,7 +91,7 @@ function Window({ children, name }: WindowProps) {
           <HiXMark />
         </button>
 
-        <div className="flex items-center justify-center overflow-hidden">
+        <div className="flex items-center justify-center overflow-hidden px-[1rem] xs:px-[2rem]">
           {cloneElement(children, { onCloseModal: close })}
         </div>
       </div>
