@@ -1,12 +1,12 @@
-import SortBy from "../../_components/SortBy";
-import Filter from "../../_components/Filter";
 import TableOperations from "../../_components/TableOperations";
+import FilterOrSort from "@/app/_components/FilterOrSort";
 
 function ReservationTableOperations() {
   return (
     <TableOperations>
-      <Filter
-        filterField="status"
+      <FilterOrSort
+        field="status"
+        horizontalUntil={1100}
         options={[
           { value: "all", label: "All" },
           { value: "checked-out", label: "Checked out" },
@@ -15,7 +15,8 @@ function ReservationTableOperations() {
         ]}
       />
 
-      <SortBy
+      <FilterOrSort
+        field="sortBy"
         options={[
           { value: "startDate-desc", label: "Sort by date (recent first)" },
           { value: "startDate-asc", label: "Sort by date (earlier first)" },

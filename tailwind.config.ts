@@ -8,6 +8,22 @@ const config: Config = {
   ],
   darkMode: "class",
   theme: {
+    screens: {
+      xss: "350px",
+
+      xs: "450px",
+
+      sm: "640px",
+
+      md: "768px",
+
+      lg: "1024px",
+
+      xl: "1280px",
+
+      "2xl": "1536px",
+    },
+
     extend: {
       colors: {
         "gray-0": "#18212f",

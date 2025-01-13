@@ -23,7 +23,7 @@ function Stat({ icon, title, value, color }: StatProps) {
   };
 
   return (
-    <div className="grid grid-cols-[6.4rem_1fr] grid-rows-[auto_auto] gap-x-[1.6rem] gap-y-[0.4rem] rounded-[7px] border border-gray-100 bg-white p-[1.6rem] dark:border-gray-800 dark:bg-gray-0">
+    <div className="grid min-h-[10rem] grid-cols-[6.4rem_1fr] grid-rows-[auto_auto] gap-x-[1.6rem] gap-y-[0.4rem] rounded-[7px] border border-gray-100 bg-white p-[1.6rem] dark:border-gray-800 dark:bg-gray-0">
       <div
         className={`col-start-1 col-end-1 row-start-1 row-end-3 flex items-center justify-center rounded-[50%] text-[3.2rem] ${conditionalStyles[color]}`}
       >

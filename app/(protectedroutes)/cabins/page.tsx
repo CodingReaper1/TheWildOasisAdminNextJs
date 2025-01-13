@@ -1,9 +1,9 @@
 import CabinTable from "./CabinTable";
 import Heading from "../../_components/Heading";
-import Row from "../../_components/Row";
 import CabinTableOperations from "./CabinTableOperations";
 import { getAllCabins } from "@/app/_lib/cabinActions";
 import { Metadata } from "next";
+import LayoutRow from "@/app/_components/LayoutRow";
 
 export const metadata: Metadata = {
   title: "Cabins",
@@ -62,10 +62,10 @@ async function Page() {
 
   return (
     <>
-      <Row type="horizontal">
+      <LayoutRow>
         <Heading as="h1">All cabins</Heading>
         <CabinTableOperations />
-      </Row>
+      </LayoutRow>
 
       <CabinTable cabins={cabins} />
     </>

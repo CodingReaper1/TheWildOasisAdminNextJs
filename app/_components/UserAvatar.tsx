@@ -21,7 +21,7 @@ function UserAvatar() {
             width={36}
             height={36}
           />
-          <span>{session?.user.name}</span>
+          <span className="hidden md:inline-block">{session?.user.name}</span>
         </>
       ) : (
         <SpinnerMini />

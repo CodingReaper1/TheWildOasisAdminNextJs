@@ -17,10 +17,10 @@ function Table({ columns, children }: TableProps) {
   return (
     <TableContext.Provider value={{ columns }}>
       <div
-        className="overflow-hidden rounded-[7px] border border-gray-200 dark:border-gray-700"
+        className="overflow-x-auto overflow-y-hidden rounded-[7px] border border-gray-200 dark:border-gray-700"
         role="table"
       >
-        {children}
+        <div className="min-w-[100rem]">{children}</div>
       </div>
     </TableContext.Provider>
   );

@@ -86,7 +86,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="text-[62.5%]">
       <body
-        className={`${poppins.className} ${sono.variable} text-[1.4rem] text-gray-700 dark:text-gray-200`}
+        className={`${poppins.className} ${sono.variable} overflow-x-hidden text-[1.4rem] text-gray-700 dark:text-gray-200`}
       >
         <SessionProvider>
           <DarkModeProvider>

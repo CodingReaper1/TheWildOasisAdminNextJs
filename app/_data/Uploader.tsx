@@ -6,7 +6,7 @@ import { uploadAll } from "../_lib/actions";
 function Uploader() {
   return (
     <MotionComponent
-      className="flex flex-col gap-[8px] rounded-md bg-white p-[0.8rem] text-center dark:bg-gray-0"
+      className="flex w-full flex-col items-center justify-center gap-[8px] rounded-md bg-white p-[0.8rem] text-center dark:bg-gray-0 md:w-auto md:items-start md:justify-normal"
       variants={sidebarVariants}
     >
       <form className="w-[16rem]" action={uploadAll}>

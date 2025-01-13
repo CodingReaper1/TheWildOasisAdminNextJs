@@ -1,12 +1,12 @@
 import TableOperations from "../../_components/TableOperations";
-import Filter from "../../_components/Filter";
-import SortBy from "../../_components/SortBy";
+import FilterOrSort from "@/app/_components/FilterOrSort";
 
 function CabinTableOperations() {
   return (
     <TableOperations>
-      <Filter
-        filterField="discount"
+      <FilterOrSort
+        field="discount"
+        horizontalUntil={900}
         options={[
           {
             value: "all",
@@ -23,7 +23,8 @@ function CabinTableOperations() {
         ]}
       />
 
-      <SortBy
+      <FilterOrSort
+        field="sortBy"
         options={[
           { value: "name-asc", label: "Sort by name (A-Z)" },
           { value: "name-desc", label: "Sort by name (Z-A)" },

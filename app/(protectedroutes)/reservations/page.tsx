@@ -1,9 +1,9 @@
 import { getAllReservationsWithCount } from "@/app/_lib/reservationActions";
 import Heading from "../../_components/Heading";
-import Row from "../../_components/Row";
 import ReservationTable from "./ReservationTable";
 import ReservationTableOperations from "./ReservationTableOperations";
 import { Metadata } from "next";
+import LayoutRow from "@/app/_components/LayoutRow";
 
 export const revalidate = 6 * 60 * 60;
 
@@ -65,10 +65,10 @@ async function Page() {
 
   return (
     <>
-      <Row type="horizontal">
+      <LayoutRow>
         <Heading as="h1">All reservations</Heading>
         <ReservationTableOperations />
-      </Row>
+      </LayoutRow>
 
       <ReservationTable reservations={reservations} count={count} />
     </>

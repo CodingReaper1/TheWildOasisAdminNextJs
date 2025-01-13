@@ -51,7 +51,7 @@ function Stats({
     : 0;
 
   return (
-    <>
+    <div className="col-start-1 col-end-5 grid grid-cols-[1fr] gap-[2.4rem] sm:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_1fr]">
       <Stat
         title="Reservations"
         color="blue"
@@ -76,7 +76,7 @@ function Stats({
         icon={<HiOutlineChartBar />}
         value={Math.round(occupation * 100) + "%"}
       />
-    </>
+    </div>
   );
 }
 

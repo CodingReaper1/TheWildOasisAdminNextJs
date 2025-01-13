@@ -31,7 +31,7 @@ function Sidebar() {
   return (
     <MotionComponent
       as="aside"
-      className="fixed left-0 top-0 z-[999] flex h-full min-h-[55rem] flex-col justify-between overflow-hidden border-r border-gray-100 bg-white px-[2rem] py-[3.2rem] text-gray-0 dark:border-gray-800 dark:bg-gray-0"
+      className="fixed left-0 top-0 z-[999] hidden h-full min-h-[55rem] flex-col justify-between overflow-hidden border-r border-gray-100 bg-white px-[2rem] py-[3.2rem] text-gray-0 dark:border-gray-800 dark:bg-gray-0 md:flex"
       // initial="hover"
       initial="initial"
       whileHover="hover"

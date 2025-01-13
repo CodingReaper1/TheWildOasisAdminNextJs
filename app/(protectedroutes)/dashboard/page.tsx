@@ -1,11 +1,11 @@
-import DashboardFilter from "./DashboardFilter";
 import DashboardLayout from "./DashboardLayout";
 import Heading from "../../_components/Heading";
-import Row from "../../_components/Row";
 import { getAllStays } from "@/app/_lib/reservationActions";
 import { getAllCabins } from "@/app/_lib/cabinActions";
 import TodayActivity from "./TodayActivity";
 import { Metadata } from "next";
+import FilterOrSort from "@/app/_components/FilterOrSort";
+import LayoutRow from "@/app/_components/LayoutRow";
 
 export const revalidate = 6 * 60 * 60;
 
@@ -67,10 +67,19 @@ async function Page() {
 
   return (
     <>
-      <Row type="horizontal">
+      <LayoutRow>
         <Heading as="h1">Dashboard</Heading>
-        <DashboardFilter />
-      </Row>
+
+        <FilterOrSort
+          field="last"
+          horizontalUntil={600}
+          options={[
+            { value: "7", label: "Last 7 days" },
+            { value: "30", label: "Last 30 days" },
+            { value: "90", label: "Last 90 days" },
+          ]}
+        />
+      </LayoutRow>
 
       <DashboardLayout stays={stays} cabins={cabins}>
         <TodayActivity />

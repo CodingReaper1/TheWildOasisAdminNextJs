@@ -102,8 +102,6 @@ function prepareData(
   startData: typeof startDataDark,
   stays: DurationChartProps["confirmedStays"],
 ) {
-  // A bit ugly code, but sometimes this is what it takes when working with real data 😅
-
   function incArrayValue(arr: typeof startDataDark, field: string) {
     return arr.map((obj) =>
       obj.duration === field ? { ...obj, value: obj.value + 1 } : obj,
@@ -142,40 +140,42 @@ function DurationChart({ confirmedStays }: DurationChartProps) {
   const data = prepareData(startData, confirmedStays);
 
   return (
-    <div className="col-span-2 col-start-3 rounded-[7px] border border-gray-100 bg-white px-[3.2rem] py-[2.4rem] text-[1.4rem] dark:border-gray-800 dark:bg-gray-0">
-      <Heading className="mb-[1.6rem]" as="h2">
-        Stay duration summary
-      </Heading>
-      <ResponsiveContainer width="100%" height={240}>
-        <PieChart>
-          <Pie
-            data={data}
-            nameKey="duration"
-            dataKey="value"
-            innerRadius={85}
-            outerRadius={110}
-            cx="40%"
-            cy="50%"
-            paddingAngle={3}
-          >
-            {data?.map((entry) => (
-              <Cell
-                fill={entry.color}
-                stroke={entry.color}
-                key={entry.duration}
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend
-            verticalAlign="middle"
-            align="right"
-            layout="vertical"
-            iconSize={15}
-            iconType="circle"
-          />
-        </PieChart>
-      </ResponsiveContainer>
+    <div className="col-span-4 col-start-1 row-start-2 row-end-3 min-h-[34rem] overflow-x-auto rounded-[7px] border border-gray-100 bg-white px-[3.2rem] py-[2.4rem] text-[1.4rem] dark:border-gray-800 dark:bg-gray-0 xl:col-span-2 xl:col-start-3">
+      <div className="min-w-[45rem]">
+        <Heading className="mb-[1.6rem]" as="h2">
+          Stay duration summary
+        </Heading>
+        <ResponsiveContainer width="100%" height={240}>
+          <PieChart>
+            <Pie
+              data={data}
+              nameKey="duration"
+              dataKey="value"
+              innerRadius={85}
+              outerRadius={110}
+              cx="40%"
+              cy="50%"
+              paddingAngle={3}
+            >
+              {data?.map((entry) => (
+                <Cell
+                  fill={entry.color}
+                  stroke={entry.color}
+                  key={entry.duration}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend
+              verticalAlign="middle"
+              align="right"
+              layout="vertical"
+              iconSize={15}
+              iconType="circle"
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

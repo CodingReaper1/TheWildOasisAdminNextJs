@@ -60,7 +60,7 @@ function DashboardLayout({ stays, cabins, children }: DashboardLayoutProps) {
   );
 
   return (
-    <div className="grid grid-cols-[1fr_1fr_1fr_1fr] grid-rows-[10rem_34rem_auto] gap-[2.4rem] text-gray-700 dark:text-gray-200">
+    <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-[2.4rem] text-gray-700 dark:text-gray-200">
       <Stats
         reservations={reservationsAfterDate}
         confirmedStays={confirmedStays}

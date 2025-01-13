@@ -7,6 +7,7 @@ import React, {
   ReactElement,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -63,13 +64,19 @@ function Window({ children, name }: WindowProps) {
 
   const { ref } = useCloseModal(close);
 
+  useEffect(() => {
+    if (name === openName) document.body.style.overflow = "hidden";
+
+    if (name !== openName) document.body.style.overflow = "visible";
+  }, [openName, name]);
+
   if (name !== openName) return null;
 
   return createPortal(
     // used to avoid parent css overflow:hidden
     <div className="fixed left-0 top-0 z-[1000] h-[100vh] w-full bg-backdrop backdrop-blur-sm transition-all duration-500 dark:bg-darkBackdrop">
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white px-[4rem] py-[3.2rem] shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.12)] transition-all duration-500 dark:bg-gray-0 dark:shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.4)]"
+        className="fixed left-1/2 top-1/2 w-[90%] -translate-x-1/2 -translate-y-1/2 transform overflow-y-auto rounded-lg bg-white py-[3.2rem] shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.12)] transition-all duration-500 dark:bg-gray-0 dark:shadow-[0_2.4rem_3.2rem_rgba(0,0,0,0.4)] lg:w-[80rem]"
         ref={ref as React.RefObject<HTMLDivElement>}
       >
         <button
@@ -80,7 +87,9 @@ function Window({ children, name }: WindowProps) {
           <HiXMark />
         </button>
 
-        <div>{cloneElement(children, { onCloseModal: close })}</div>
+        <div className="flex items-center justify-center overflow-hidden">
+          {cloneElement(children, { onCloseModal: close })}
+        </div>
       </div>
     </div>,
     document.body,

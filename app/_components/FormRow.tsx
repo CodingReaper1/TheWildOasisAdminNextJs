@@ -15,7 +15,7 @@ function FormRow({ label, error, children }: FormRowProps) {
   const id = (childElement as React.ReactElement).props.id;
 
   return (
-    <div className="FormRow grid grid-cols-[24rem_1fr_1.2fr] items-center py-[1.2rem] first:pt-0 last:border-none last:pb-0 odd:border-b odd:border-gray-100 even:border-b even:border-gray-100 odd:dark:border-gray-800 even:dark:border-gray-800">
+    <div className="FormRow flex flex-col gap-2 py-[1.5rem] first:pt-0 last:border-none last:pb-0 odd:border-b odd:border-gray-100 even:border-b even:border-gray-100 odd:dark:border-gray-800 even:dark:border-gray-800 lg:grid lg:grid-cols-[24rem_1fr_1.2fr] lg:flex-row lg:items-center lg:py-[1.2rem]">
       {label && (
         <label className="font-medium" htmlFor={id}>
           {label}

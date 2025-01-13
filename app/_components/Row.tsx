@@ -7,7 +7,7 @@ type RowProps = {
 function Row({ children, type = "vertical", className }: RowProps) {
   return (
     <div
-      className={`flex ${className} ${type === "vertical" ? "flex-col gap-[2.5rem]" : "items-center justify-between"}`}
+      className={`flex ${type === "vertical" ? "flex-col gap-[2.5rem]" : "items-center justify-between"} ${className}`}
     >
       {children}
     </div>

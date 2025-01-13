@@ -2,7 +2,6 @@
 
 import ReservationDataBox from "../../reservations/ReservationDataBox";
 
-import Row from "../../../_components/Row";
 import Heading from "../../../_components/Heading";
 import ButtonGroup from "../../../_components/ButtonGroup";
 import Button from "../../../_components/Button";
@@ -87,12 +86,14 @@ function CheckinReservation({
 
   return (
     <>
-      <Row type="horizontal">
-        <Heading as="h1">Check in reservation #{reservationId}</Heading>
-        <ButtonText ariaLabel="Go back" onClick={() => router.back()}>
-          &larr; Back
-        </ButtonText>
-      </Row>
+      <ButtonText
+        ariaLabel="Go back"
+        onClick={() => router.back()}
+        className="mb-[2rem] ml-auto"
+      >
+        &larr; Back
+      </ButtonText>
+      <Heading as="h1">Check in reservation #{reservationId}</Heading>
 
       <ReservationDataBox reservation={reservation} />
 
@@ -111,7 +112,7 @@ function CheckinReservation({
         </div>
       )}
 
-      <div className="rounded-md border border-gray-100 bg-white px-[4rem] py-[2.4rem] dark:border-gray-800 dark:bg-gray-0">
+      <div className="rounded-md border border-gray-100 bg-white px-[2rem] py-[2.4rem] dark:border-gray-800 dark:bg-gray-0 sm:px-[4rem]">
         <Checkbox
           checked={confirmPaid}
           onChange={() => setConfirmPaid((confirm) => !confirm)}

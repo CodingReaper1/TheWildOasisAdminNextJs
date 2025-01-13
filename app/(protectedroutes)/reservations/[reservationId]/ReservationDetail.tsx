@@ -1,7 +1,6 @@
 "use client";
 
 import ReservationDataBox from "../ReservationDataBox";
-import Row from "../../../_components/Row";
 import Heading from "../../../_components/Heading";
 import Tag from "../../../_components/Tag";
 import ButtonGroup from "../../../_components/ButtonGroup";
@@ -61,17 +60,20 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
 
   return (
     <>
-      <Row type="horizontal">
-        <div className="flex items-center gap-[2.4rem]">
-          <Heading as="h1">Reservation #{reservationId}</Heading>
-          <Tag type={statusToTagName[validStatus]}>
-            {status?.replace("-", " ")}
-          </Tag>
-        </div>
-        <ButtonText ariaLabel="Go back" onClick={() => router.back()}>
-          &larr; Back
-        </ButtonText>
-      </Row>
+      <ButtonText
+        ariaLabel="Go back"
+        onClick={() => router.back()}
+        className="mb-[2rem] ml-auto"
+      >
+        &larr; Back
+      </ButtonText>
+
+      <div className="mb-[2rem] flex flex-col gap-[1rem] xs:mb-0 xs:flex-row xs:items-center xs:gap-[2.4rem]">
+        <Heading as="h1">Reservation #{reservationId}</Heading>
+        <Tag type={statusToTagName[validStatus]}>
+          {status?.replace("-", " ")}
+        </Tag>
+      </div>
 
       <ReservationDataBox reservation={reservation} />
 
