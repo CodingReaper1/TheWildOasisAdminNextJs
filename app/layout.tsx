@@ -84,7 +84,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="text-[62.5%]">
+    <html lang="en" className="text-[62.5%] 2xl:text-[80%]">
       <body
         className={`${poppins.className} ${sono.variable} overflow-x-hidden text-[1.4rem] text-gray-700 dark:text-gray-200`}
       >

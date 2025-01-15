@@ -1,4 +1,4 @@
-// Still needed to setup supabase for bucket couldn't find other solution that works with serverless edge runtime
+// Still needed to setup supabase for file/image uploads couldn't find other solution that works with serverless edge runtime
 
 import { createClient } from "@supabase/supabase-js";
 
