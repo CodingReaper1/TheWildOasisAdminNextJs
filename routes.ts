@@ -10,6 +10,6 @@ export const authRoutes = ["/"];
 
 export const apiAuthPrefix = "/api/auth";
 
-// Array of routes which are accesable only after authentication
+// Route thats user being redirected to
 
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard";

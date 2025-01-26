@@ -34,7 +34,6 @@ export async function isAuthenticated() {
     salt: cookieName,
   });
 
-  // If not authenticated throw error
   if (!!!jwt) throw new Error("Not authenticated");
 
   return jwt;
@@ -101,7 +100,7 @@ export async function createReservations() {
 
     return finalReservations;
   } catch (error) {
-    return [];
     console.error(error);
+    return [];
   }
 }

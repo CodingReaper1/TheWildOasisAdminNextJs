@@ -5,6 +5,11 @@ import { LoginSchema } from "./app/_schemas/authSchemas";
 import prisma from "./app/_lib/db";
 
 export default {
+  session: {
+    maxAge: 2 * 24 * 60 * 60, // inactive for 2 days = logout
+    strategy: "jwt",
+    updateAge: 60 * 60,
+  },
   providers: [
     Credentials({
       async authorize(credentials) {

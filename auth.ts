@@ -28,10 +28,10 @@ export const {
       const existingUser = await getUserById(token.sub);
 
       if (!existingUser) return token;
+      console.log(token);
 
       token.role = existingUser.role;
       token.image = existingUser.image;
-      token.name = existingUser.name;
 
       return token;
     },
@@ -50,6 +50,5 @@ export const {
     },
   },
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
   ...authConfig,
 });
