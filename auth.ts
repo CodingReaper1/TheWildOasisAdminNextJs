@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
-import prisma from "./app/_lib/db";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
 import { getUserById } from "./app/_lib/authActions";
 import { UserRole } from "@prisma/client";
+// import prisma from "./app/_lib/db";
+// import { PrismaAdapter } from "@auth/prisma-adapter";
 
 export const {
   handlers: { GET, POST },
@@ -28,7 +28,6 @@ export const {
       const existingUser = await getUserById(token.sub);
 
       if (!existingUser) return token;
-      console.log(token);
 
       token.role = existingUser.role;
       token.image = existingUser.image;
@@ -49,6 +48,6 @@ export const {
       return session;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   ...authConfig,
 });
