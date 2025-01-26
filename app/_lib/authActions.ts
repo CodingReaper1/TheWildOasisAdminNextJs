@@ -142,7 +142,8 @@ export async function updateUser(formData: FormData) {
   const { password, fullName, userId, avatar } = result.data;
 
   try {
-    await isAuthenticated();
+    const jwt = await isAuthenticated();
+    if (jwt.sub !== userId) throw new Error("No permission!");
 
     // const fileBuffer =
     //   avatar?.size !== 0 && avatar

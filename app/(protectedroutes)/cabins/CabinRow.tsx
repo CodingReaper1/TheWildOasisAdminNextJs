@@ -46,7 +46,7 @@ function CabinRow({
             sizes="20vw"
             quality={80}
             priority
-            className="aspect-[3/2] w-64 -translate-x-[7px] scale-150 transform object-cover object-center text-sm"
+            className="aspect-[3/2] -translate-x-[7px] scale-150 transform object-cover object-center text-sm"
             alt="Image of cabin/house in woods"
           />
         )}

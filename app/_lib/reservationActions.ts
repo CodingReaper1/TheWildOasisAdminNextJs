@@ -8,24 +8,6 @@ import { z } from "zod";
 import { ReservationsSchemaDatabase } from "../_schemas/databaseSchemas";
 import { UpdateCheckinSchema } from "../_schemas/reservationSchemas";
 
-// export async function createDummyReservations() {
-//   try {
-//     await isAuthenticated();
-
-//     await deleteReservations();
-
-//     const data = await createReservations();
-
-//     await prisma.reservations.createMany({
-//       data: data,
-//     });
-//     revalidatePath("/dashboard");
-//     revalidatePath("/reservations");
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
 export async function getAllReservationsWithCount() {
   try {
     const count = await prisma.reservations.count();
