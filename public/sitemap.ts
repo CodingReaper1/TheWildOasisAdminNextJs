@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getAllReservations } from "./_lib/reservationActions";
+import { getAllReservations } from "@/app/_lib/reservationActions";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const reservations = await getAllReservations();
